@@ -78,27 +78,3 @@ const Course = ({ title, link, description, id, published, price }) => {
 };
 
 export default ShowCourses;
-
-// function ShowCourses() {
-//     const [courses, setCourses] = useState([]);
-
-//     // Function to fetch all courses from the backend
-//     async function fetchCourses() {
-//       const response = await axios.get("/admin/courses");
-//       setCourses(response.data.courses);
-//     }
-
-//     // Fetch all courses when the component mounts
-//     useEffect(() => {
-//       fetchCourses();
-//     }, []);
-
-//     return (
-//       <div>
-//         <h1>Show Courses</h1>
-//         <ul>
-//           {courses.map((course) => (
-//             <li key={course.id}>{course.title}</li>
-//           ))}
-//         </ul>
-//       </div>
