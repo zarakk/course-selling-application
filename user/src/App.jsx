@@ -7,32 +7,12 @@ import Courses from "./components/UserComponents/Courses";
 import Course from "./components/UserComponents/Course";
 import Signup from "./components/UserComponents/Signup";
 import PurchasedCourses from "./components/UserComponents/PurchasedCourses";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <Router>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            My Courses
-          </Typography>
-          <Button color="inherit" component={Link} to="/">
-            Home
-          </Button>
-          <Button color="inherit" component={Link} to="/courses">
-            Courses
-          </Button>
-          <Button color="inherit" component={Link} to="/courses/purchased">
-            Purchased Courses
-          </Button>
-          <Button color="inherit" component={Link} to="/login">
-            Login
-          </Button>
-          <Button color="inherit" component={Link} to="/signup">
-            Signup
-          </Button>
-        </Toolbar>
-      </AppBar>
+      <Navbar />
       <Container style={{ marginTop: "2rem" }}>
         <Routes>
           <Route path="/" exact element={<Landing />} />

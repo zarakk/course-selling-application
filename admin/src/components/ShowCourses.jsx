@@ -33,7 +33,7 @@ const ShowCourses = () => {
           <Course
             key={key}
             title={c.title}
-            link={c.link}
+            imageLink={c.imageLink}
             description={c.description}
             published={c.published}
             price={c.price}
@@ -45,7 +45,7 @@ const ShowCourses = () => {
   );
 };
 
-const Course = ({ title, link, description, id, published, price }) => {
+const Course = ({ title, imageLink, description, id, published, price }) => {
   const navigate = useNavigate();
   const editRoute = () => {
     navigate(`/courses/${id}`);
@@ -54,27 +54,33 @@ const Course = ({ title, link, description, id, published, price }) => {
     <Box
       sx={{
         my: 2,
-        p: 2,
+        p: 4,
         border: 2,
         display: "flex",
         justifyContent: "center",
         flexDirection: "column",
+        cursor: "pointer",
+        ":hover": {
+          backgroundColor: "#f5f5f5",
+        },
       }}
       onClick={editRoute}
     >
-      <img src={link}></img>
+      <img src={imageLink} alt={title} width={200} />
       <Typography variant="h5" component="h2">
         {title}
       </Typography>
-
       <Typography variant="h6" component="h2">
         {description}
       </Typography>
       <Typography variant="h6" component="h2">
         ${price}
       </Typography>
+      <Typography variant="subtitle1" component="p">
+        Published on: {new Date(published).toLocaleDateString()}
+      </Typography>
     </Box>
   );
 };
 
-export default ShowCourses;
+export default Course;

@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
-
-function Course({ match }) {
+import { useParams } from "react-router-dom";
+import { Typography, Button, Box } from "@mui/material";
+function Course() {
   const [course, setCourse] = useState(null);
-
+  const { id } = useParams();
   // Function to fetch a single course from the backend
   async function fetchCourse() {
     try {
-      const response = await axiosInstance.get(
-        `/users/courses/${match.params.id}`
-      );
+      const response = await axiosInstance.get(`/users/courses/`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("user-token")}`,
+        },
+      });
       if (response.status === 200) {
-        setCourse(response.data);
+        response.data.courses.map((course) => {
+          if (course.id === parseInt(id)) {
+            setCourse(course);
+          }
+        });
       } else {
         // handle non-200 response status
         console.error(`An error occurred: ${response.status}`);
@@ -24,7 +31,11 @@ function Course({ match }) {
 
   // Function to purchase a course
   async function purchaseCourse() {
-    await axiosInstance.post(`/users/courses/${match.params.id}`);
+    await axiosInstance.post(`/users/courses/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("user-token")}`,
+      },
+    });
     alert("Course purchased successfully!");
   }
 
@@ -34,21 +45,34 @@ function Course({ match }) {
   }, []);
 
   if (!course) return null;
-
   return (
-    <div>
-      <Typography variant="h4">{course.title}</Typography>
-      <Typography variant="body1">{course.description}</Typography>
-      <Typography variant="body1">Price: ${course.price}</Typography>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <img src={course.imageLink} width={200} alt={course.title} />
+      <Typography variant="h4" sx={{ mt: 2 }}>
+        {course.title}
+      </Typography>
+      <Typography variant="body1" sx={{ mt: 1 }}>
+        {course.description}
+      </Typography>
+      <Typography variant="body1" sx={{ mt: 1 }}>
+        Price: ${course.price}
+      </Typography>
       <Button
         variant="contained"
         color="primary"
         onClick={purchaseCourse}
-        style={{ marginTop: "1rem" }}
+        sx={{ mt: 2 }}
       >
         Purchase Course
       </Button>
-    </div>
+    </Box>
   );
 }
+
 export default Course;

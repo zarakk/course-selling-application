@@ -2,11 +2,11 @@ import { Button, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
-
+import { useNavigate } from "react-router-dom";
 function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   // Function to register a new user
   async function register() {
     const response = await axiosInstance.post("/users/signup", {
@@ -15,6 +15,7 @@ function Signup() {
     });
     if (response.data.token) {
       localStorage.setItem("user-token", response.data.token);
+      navigate("/courses");
     } else {
       console.log(response.data);
     }

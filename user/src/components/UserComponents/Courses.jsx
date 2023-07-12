@@ -1,7 +1,14 @@
-import { Button, CardActions, CardContent, Typography } from "@mui/material";
+import {
+  Button,
+  CardActions,
+  CardContent,
+  Typography,
+  Card,
+} from "@mui/material";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import axiosInstance from "../../utils/axiosInstance";
+import { Link } from "react-router-dom";
+
 function Courses() {
   const [courses, setCourses] = useState([]);
 

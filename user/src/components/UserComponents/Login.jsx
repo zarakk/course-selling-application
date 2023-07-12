@@ -1,24 +1,20 @@
 import { Button, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
-
+import { useNavigate } from "react-router-dom";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   // Function to log in a user
   async function login() {
-    const response = await axiosInstance.post(
-      "/users/login",
-      { username, password }
-      // {
-      //   headers: {
-      //     Authorization: `Bearer ${localStorage.getItem("user-token")}`,
-      //   },
-      // }
-    );
+    const response = await axiosInstance.post("/users/login", {
+      username,
+      password,
+    });
     if (response.data.token) {
       localStorage.setItem("user-token", response.data.token);
+      navigate("/courses");
     } else {
       console.error(error);
     }
