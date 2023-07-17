@@ -6,25 +6,40 @@ import {
   Link,
   TextField,
   Typography,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import axiosInstance from "../utils/axiosInstance";
 
 const Login = () => {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+  const [severity, setSeverity] = React.useState("success");
 
   const handleSubmit = async () => {
     // Handle form submission
-    const response = await axiosInstance.post("/admin/login", {
-      username,
-      password,
-    });
-    if (response.data.token) {
-      localStorage.setItem("user-token", response.data.token);
-    } else {
-      console.error(error);
+    try {
+      const response = await axiosInstance.post("/admin/login", {
+        username,
+        password,
+      });
+      if (response.data.token) {
+        localStorage.setItem("user-token", response.data.token);
+        setMessage("Logged in successfully!");
+        setSeverity("success");
+        setOpen(true);
+      } else {
+        setMessage("An error occurred while logging in.");
+        setSeverity("error");
+        setOpen(true);
+      }
+    } catch (error) {
+      setMessage("An error occurred while logging in.");
+      setSeverity("error");
+      setOpen(true);
     }
-    console.log(response.data);
   };
 
   return (
@@ -78,6 +93,15 @@ const Login = () => {
           </Link>
         </Box>
       </Box>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={() => setOpen(false)}
+      >
+        <Alert onClose={() => setOpen(false)} severity={severity}>
+          {message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

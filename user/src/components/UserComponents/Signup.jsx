@@ -1,25 +1,39 @@
-import { Button, TextField, Typography } from "@mui/material";
-import axios from "axios";
-import { useState } from "react";
+import { Button, TextField, Typography, Snackbar, Alert } from "@mui/material";
 import axiosInstance from "../../utils/axiosInstance";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState("success");
   const navigate = useNavigate();
+
   // Function to register a new user
   async function register() {
-    const response = await axiosInstance.post("/users/signup", {
-      username,
-      password,
-    });
-    if (response.data.token) {
-      localStorage.setItem("user-token", response.data.token);
-      navigate("/courses");
-    } else {
-      console.log(response.data);
+    try {
+      const response = await axiosInstance.post("/users/signup", {
+        username,
+        password,
+      });
+      if (response.data.token) {
+        localStorage.setItem("user-token", response.data.token);
+        setMessage("Signed up successfully!");
+        setSeverity("success");
+        setOpen(true);
+        navigate("/courses");
+      } else {
+        setMessage("An error occurred while signing up.");
+        setSeverity("error");
+        setOpen(true);
+      }
+    } catch (error) {
+      setMessage("An error occurred while signing up.");
+      setSeverity("error");
+      setOpen(true);
     }
-    console.log(response.data);
   }
 
   return (
@@ -50,7 +64,17 @@ function Signup() {
           Signup
         </Button>
       </form>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={() => setOpen(false)}
+      >
+        <Alert onClose={() => setOpen(false)} severity={severity}>
+          {message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
+
 export default Signup;
