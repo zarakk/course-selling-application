@@ -1,0 +1,101 @@
+import React, { useEffect, useState } from "react";
+import { Box, Container, Typography } from "@mui/material";
+import axiosInstance from "../utils/axiosInstance";
+import { useNavigate } from "react-router-dom";
+
+interface Course {
+  title: string;
+  imageLink: string;
+  description: string;
+  id: number;
+  published: string;
+  price: number;
+}
+
+const ShowCourses = () => {
+  const [courses, setCourses] = useState<Course[]>([]);
+
+  // Function to fetch all courses from the backend
+  async function fetchCourses() {
+    const response = await axiosInstance.get("/admin/courses", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("user-token")}`,
+      },
+    });
+    setCourses(response.data.courses);
+  }
+
+  // Fetch all courses when the component mounts
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
+  return (
+    <Container maxWidth="sm">
+      <Box sx={{ my: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Show Courses Page
+        </Typography>
+        {courses.map((c) => (
+          <Course
+            key={c.id}
+            title={c.title}
+            imageLink={c.imageLink}
+            description={c.description}
+            published={c.published}
+            price={c.price}
+            id={c.id}
+          />
+        ))}
+      </Box>
+    </Container>
+  );
+};
+
+const Course = ({
+  title,
+  imageLink,
+  description,
+  id,
+  published,
+  price,
+}: Course) => {
+  const navigate = useNavigate();
+  const editRoute = () => {
+    navigate(`/courses/${id}`);
+  };
+
+  return (
+    <Box
+      sx={{
+        my: 2,
+        p: 4,
+        border: 2,
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        cursor: "pointer",
+        ":hover": {
+          backgroundColor: "#f5f5f5",
+        },
+      }}
+      onClick={editRoute}
+    >
+      <img src={imageLink} alt={title} width={200} />
+      <Typography variant="h5" component="h2">
+        {title}
+      </Typography>
+      <Typography variant="h6" component="h2">
+        {description}
+      </Typography>
+      <Typography variant="h6" component="h2">
+        ${price}
+      </Typography>
+      <Typography variant="subtitle1" component="p">
+        Published on: {new Date(published).toLocaleDateString()}
+      </Typography>
+    </Box>
+  );
+};
+
+export default ShowCourses;

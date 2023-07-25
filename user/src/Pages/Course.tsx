@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { useParams } from "react-router-dom";
 import { Typography, Button, Box } from "@mui/material";
-import { CourseType } from "../types";
+import { CourseType } from "../custom";
 
 function Course() {
   const [course, setCourse] = useState<CourseType | null>(null);

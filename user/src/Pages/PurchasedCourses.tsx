@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, Typography } from "@mui/material";
 import axiosInstance from "../utils/axiosInstance";
-import { CoursesType } from "../types";
+import { CoursesType } from "../custom";
 
 function PurchasedCourses() {
   const [courses, setCourses] = useState<CoursesType[]>([]);

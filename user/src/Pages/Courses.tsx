@@ -8,7 +8,7 @@ import {
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { Link } from "react-router-dom";
-import { CoursesType } from "../types";
+import { CoursesType } from "../custom";
 
 function Courses() {
   const [courses, setCourses] = useState<CoursesType[]>([]);
