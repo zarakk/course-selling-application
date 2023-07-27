@@ -3,10 +3,14 @@ import axiosInstance from "../utils/axiosInstance";
 import { useParams } from "react-router-dom";
 import { Typography, Button, Box } from "@mui/material";
 import { CourseType } from "../custom";
+import AlertMessage from "../components/AlertMessage";
 
 function Course() {
   const [course, setCourse] = useState<CourseType | null>(null);
   const { id } = useParams();
+  const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState("success");
+
   // Function to fetch a single course from the backend
   async function fetchCourse() {
     try {
@@ -33,14 +37,23 @@ function Course() {
     }
   }
 
-  // Function to purchase a course
   async function purchaseCourse() {
-    await axiosInstance.post(`/users/courses/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("user-token")}`,
-      },
-    });
-    alert("Course purchased successfully!");
+    try {
+      await axiosInstance.post(
+        `/users/courses/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("user-token")}`,
+          },
+        }
+      );
+      setMessage("Course purchased successfully!");
+      setSeverity("success");
+    } catch (error) {
+      setMessage(error.response.data.message);
+      setSeverity("error");
+    }
   }
 
   // Fetch the course when the component mounts
@@ -75,6 +88,7 @@ function Course() {
       >
         Purchase Course
       </Button>
+      {message && <AlertMessage message={message} severity={severity} />}
     </Box>
   );
 }

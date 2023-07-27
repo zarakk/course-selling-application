@@ -18,9 +18,7 @@ function Navbar() {
         <Button color="inherit" component={Link} to="/">
           Home
         </Button>
-        <Button color="inherit" component={Link} to="/courses">
-          Courses
-        </Button>
+
         {isLoggedIn ? (
           <>
             <Button color="inherit" component={Link} to="/courses/purchased">
@@ -28,6 +26,11 @@ function Navbar() {
             </Button>
             {/* <Avatar>{username[0]}</Avatar> */}
             {/* <Typography variant="subtitle1">{username}</Typography> */}
+
+            <Button color="inherit" component={Link} to="/courses">
+              Courses
+            </Button>
+
             <Button color="inherit" onClick={logout}>
               Logout
             </Button>

@@ -22,7 +22,7 @@ const Login: React.FC = () => {
   const handleSubmit = async () => {
     // Handle form submission
     try {
-      const response = await axiosInstance.post("/admin/login", {
+      const response = await axiosInstance.post("/users/login", {
         username,
         password,
       });
