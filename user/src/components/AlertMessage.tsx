@@ -1,11 +1,19 @@
-import React from "react";
-import { Snackbar, Alert } from "@mui/material";
+import React, { SyntheticEvent } from "react";
+import { Snackbar, Alert, SnackbarCloseReason } from "@mui/material";
 import { useState } from "react";
 
-export default function AlertMessage({ message, severity }) {
+interface AlertMessageProps {
+  message: string;
+  severity: "success" | "info" | "warning" | "error";
+}
+
+export default function AlertMessage({ message, severity }: AlertMessageProps) {
   const [open, setOpen] = useState(true);
 
-  const handleClose = (event, reason) => {
+  const handleClose = (
+    event: Event | SyntheticEvent<Element, Event>,
+    reason?: SnackbarCloseReason
+  ) => {
     if (reason === "clickaway") {
       return;
     }

@@ -1,16 +1,20 @@
 const express = require("express");
 const app = express();
-const jwt = require("jsonwebtoken");
-const fs = require("fs");
 const cors = require("cors");
 app.use(cors());
+
+const jwt = require("jsonwebtoken");
+const fs = require("fs");
+
 app.use(express.json());
+const { Server } = require("socket.io");
 
 let ADMINS = [];
 let USERS = [];
 let COURSES = [];
 
 // Use JSON middleware to parse request body
+
 app.use(express.json());
 
 // Define a secret key for JWT
@@ -359,6 +363,7 @@ app.post("/users/login", (req, res) => {
 // Define a user route to list all the courses
 app.get("/users/courses", isUserAuthenticated, (req, res) => {
   // Read the course data from the file
+
   const courses = readData("courses.json");
 
   // Filter only published courses
@@ -408,6 +413,32 @@ app.post("/users/courses/:courseId", isUserAuthenticated, (req, res) => {
   res.status(201).json({ message: "Course purchased successfully" });
 });
 
+// Define a user route to purchase a course
+app.get("/users/purchase/course/:courseId", (req, res) => {
+  // Get the course id from the URL path parameter
+  const courseId = parseInt(req.params.courseId);
+
+  // Validate the input parameter
+  if (isNaN(courseId)) {
+    return res.status(400).json({ message: "Invalid course id" });
+  }
+
+  // Read the purchase data from the file
+  const purchases = readData("purchases.json");
+  const courses = readData("courses.json");
+
+  // Check if the user has already purchased this course
+  const purchasedCourse = purchases.find(
+    (purchase) => purchase.courseId === courseId
+  );
+
+  if (purchasedCourse) {
+    return res.status(200).json(courses[courseId]);
+  }
+
+  res.status(401).json({ message: "Course is not purchased" });
+});
+
 // Define a user route to list all purchased courses
 
 app.get("/users/purchasedCourses", isUserAuthenticated, (req, res) => {
@@ -437,7 +468,24 @@ app.get("/users/purchasedCourses", isUserAuthenticated, (req, res) => {
 });
 
 // Start listening for incoming requests
+const server = app.listen(3000, () => {
+  console.log("listening on *:3000");
+});
 
-app.listen(3000, () => {
-  console.log("Server listening on port 3000");
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    // allowedHeaders: ["my-custom-header"],
+    credentials: true,
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+  socket.on("chat message", (msg) => {
+    io.emit("chat message", msg);
+  });
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
 });

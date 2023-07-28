@@ -8,6 +8,7 @@ import Course from "./Pages/Course";
 import Signup from "./Pages/Signup";
 import PurchasedCourses from "./Pages/PurchasedCourses";
 import Navbar from "./components/Navbar";
+import PurchasedCourseRoomPage from "./Pages/PurchasedCourseRoomPage";
 
 const App: React.FC = () => {
   return (
@@ -19,8 +20,13 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/courses" element={<Courses />} />
-          <Route path="/courses/purchased" element={<PurchasedCourses />} />
           <Route path="/courses/:id" element={<Course />} />
+          <Route path="/courses/purchased" element={<PurchasedCourses />} />
+          <Route
+            path="/purchase/course/:courseId"
+            element={<PurchasedCourseRoomPage />}
+          />
+          ;
         </Routes>
       </Container>
     </Router>

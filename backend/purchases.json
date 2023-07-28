@@ -2,5 +2,9 @@
   {
     "userId": 4,
     "courseId": 1
+  },
+  {
+    "userId": 5,
+    "courseId": 1
   }
 ]

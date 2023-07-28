@@ -5,11 +5,21 @@ import { Typography, Button, Box } from "@mui/material";
 import { CourseType } from "../custom";
 import AlertMessage from "../components/AlertMessage";
 
+interface ErrorReturnType {
+  response?: {
+    data: {
+      message: string;
+    };
+  };
+}
+
 function Course() {
   const [course, setCourse] = useState<CourseType | null>(null);
   const { id } = useParams();
   const [message, setMessage] = useState("");
-  const [severity, setSeverity] = useState("success");
+  const [severity, setSeverity] = useState<
+    "success" | "info" | "warning" | "error"
+  >("success");
 
   // Function to fetch a single course from the backend
   async function fetchCourse() {
@@ -51,8 +61,10 @@ function Course() {
       setMessage("Course purchased successfully!");
       setSeverity("success");
     } catch (error) {
-      setMessage(error.response.data.message);
-      setSeverity("error");
+      const typedError = error as ErrorReturnType;
+      if (typedError.response) {
+        setMessage(typedError.response.data.message);
+      }
     }
   }
 

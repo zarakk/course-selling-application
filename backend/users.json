@@ -22,5 +22,11 @@
     "username": "zaral",
     "password": "zaral",
     "role": "user"
+  },
+  {
+    "id": 5,
+    "username": "zara",
+    "password": "zara",
+    "role": "user"
   }
 ]
