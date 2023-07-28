@@ -28,7 +28,7 @@ export default function PurchasedCourseRoomPage() {
   if (!course) {
     return <div>Loading...</div>;
   }
-
+  console.log("Rendering ParentComponent");
   return (
     <Box>
       <Typography variant="h4">{course.title}</Typography>

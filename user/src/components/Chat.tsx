@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import {
   Box,
@@ -27,21 +27,34 @@ interface Message {
 }
 
 export default function Chat() {
+  const socketRef = useRef<any>();
+  const listRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [username, setUsername] = useState("");
 
   useEffect(() => {
+    // Initialize the socket.io client
+    socketRef.current = io("http://localhost:3000/", {
+      transports: ["websocket", "polling", "flashsocket"],
+    }); // Replace with your server URL
+
     // Listen for incoming messages from the server
-    socket.on("chat message", (message: Message) => {
+    socketRef.current.on("chat message", (message: Message) => {
       setMessages((messages) => [...messages, message]);
     });
-    // Clean up the listener when the component unmounts
+
+    // Clean up the listener and disconnect the socket when the component unmounts
     return () => {
-      socket.off("chat message");
+      socketRef.current?.off("chat message");
+      socketRef.current?.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    listRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [messages]);
 
   const handleToggleOpen = () => {
     setOpen((open) => !open);
@@ -55,12 +68,12 @@ export default function Chat() {
   };
 
   return (
-    <ChatContainer sx={{ border: "1px solid black" }}>
+    <ChatContainer>
       <Button onClick={handleToggleOpen}>{open ? "Close" : "Open"}</Button>
       <Collapse in={open}>
         <List sx={{ height: 200, overflowY: "scroll" }}>
           {messages.map((message, index) => (
-            <ListItem key={index}>
+            <ListItem key={index} ref={listRef}>
               <ListItemText
                 primary={message.text}
                 secondary={`Sent by ${message.user}`}
@@ -68,7 +81,7 @@ export default function Chat() {
             </ListItem>
           ))}
         </List>
-        <div onClick={handleSendMessage}>
+        <div>
           <TextField
             label="Username"
             value={username}
@@ -78,6 +91,11 @@ export default function Chat() {
             label="Message"
             value={newMessage}
             onChange={(event) => setNewMessage(event.target.value)}
+            onKeyPress={(event) => {
+              if (event.key === "Enter") {
+                handleSendMessage();
+              }
+            }}
           />
           <Button onClick={handleSendMessage}>Send</Button>
         </div>
