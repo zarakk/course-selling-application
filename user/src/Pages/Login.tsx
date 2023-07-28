@@ -9,15 +9,18 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
+import { useRecoilState } from "recoil";
 import axiosInstance from "../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import { usernameState } from "../state/usernameState";
 
 const Login: React.FC = () => {
-  const [username, setUsername] = useState<string>("");
+  const [username, setUsername] = useRecoilState(usernameState);
   const [password, setPassword] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [severity, setSeverity] = useState<"success" | "error">("success");
+
   const navigate = useNavigate();
   const handleSubmit = async () => {
     // Handle form submission

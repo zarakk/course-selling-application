@@ -3,14 +3,15 @@ import { Button, TextField, Typography, Snackbar, Alert } from "@mui/material";
 import axiosInstance from "../utils/axiosInstance";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useRecoilState } from "recoil";
+import { usernameState } from "../state/usernameState";
 interface SignupResponse {
   data: {
     token: string;
   };
 }
 function Signup() {
-  const [username, setUsername] = useState<string>("");
+  const [username, setUsername] = useRecoilState(usernameState);
   const [password, setPassword] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");

@@ -10,7 +10,8 @@ import {
   TextField,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
+import { useRecoilState } from "recoil";
+import { usernameState } from "../state/usernameState";
 const socket = io("http://localhost:3000/", {
   transports: ["websocket", "polling", "flashsocket"],
 }); // Replace with your server URL
@@ -28,11 +29,11 @@ interface Message {
 
 export default function Chat() {
   const socketRef = useRef<any>();
-  const listRef = useRef(null);
+  const listRef = useRef<HTMLLIElement | null>(null);
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [username, setUsername] = useState("");
+  const [username] = useRecoilState(usernameState);
 
   useEffect(() => {
     // Initialize the socket.io client
@@ -68,10 +69,21 @@ export default function Chat() {
   };
 
   return (
-    <ChatContainer>
-      <Button onClick={handleToggleOpen}>{open ? "Close" : "Open"}</Button>
+    <ChatContainer
+      sx={{ border: "1px solid black", padding: 2, backgroundColor: "white" }}
+    >
+      <Button onClick={handleToggleOpen}>Chat</Button>
       <Collapse in={open}>
-        <List sx={{ height: 200, overflowY: "scroll" }}>
+        <List
+          sx={{
+            height: 200,
+            overflowY: "scroll",
+
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
           {messages.map((message, index) => (
             <ListItem key={index} ref={listRef}>
               <ListItemText
@@ -83,15 +95,10 @@ export default function Chat() {
         </List>
         <div>
           <TextField
-            label="Username"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-          />
-          <TextField
             label="Message"
             value={newMessage}
             onChange={(event) => setNewMessage(event.target.value)}
-            onKeyPress={(event) => {
+            onKeyDown={(event) => {
               if (event.key === "Enter") {
                 handleSendMessage();
               }
