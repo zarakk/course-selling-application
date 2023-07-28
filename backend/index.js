@@ -479,12 +479,27 @@ const io = new Server(server, {
     credentials: true,
   },
 });
-
 io.on("connection", (socket) => {
   console.log("a user connected");
-  socket.on("chat message", (msg) => {
-    io.emit("chat message", msg);
+
+  // Listen for the 'join room' event
+  socket.on("join room", (room) => {
+    // Join the specified room
+    socket.join(room);
   });
+
+  // Listen for the 'leave room' event
+  socket.on("leave room", (room) => {
+    // Leave the specified room
+    socket.leave(room);
+  });
+
+  // Listen for the 'chat message' event
+  socket.on("chat message", (room, msg) => {
+    // Send the message to all sockets in the specified room
+    io.to(room).emit("chat message", msg);
+  });
+
   socket.on("disconnect", () => {
     console.log("user disconnected");
   });

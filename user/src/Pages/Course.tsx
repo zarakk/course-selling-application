@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { useParams } from "react-router-dom";
-import { Typography, Button, Box } from "@mui/material";
+import { Typography, Button, Box, CircularProgress } from "@mui/material";
 import { CourseType } from "../custom";
 import AlertMessage from "../components/AlertMessage";
 
@@ -73,7 +73,9 @@ function Course() {
     fetchCourse();
   }, []);
 
-  if (!course) return null;
+  if (!course) {
+    return <CircularProgress />;
+  }
   return (
     <Box
       sx={{

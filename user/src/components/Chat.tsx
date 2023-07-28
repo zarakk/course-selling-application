@@ -12,6 +12,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { useRecoilState } from "recoil";
 import { usernameState } from "../state/usernameState";
+import { useParams } from "react-router-dom";
 const socket = io("http://localhost:3000/", {
   transports: ["websocket", "polling", "flashsocket"],
 }); // Replace with your server URL
@@ -28,6 +29,8 @@ interface Message {
 }
 
 export default function Chat() {
+  const { courseId } = useParams();
+
   const socketRef = useRef<any>();
   const listRef = useRef<HTMLLIElement | null>(null);
   const [open, setOpen] = useState(false);
@@ -41,6 +44,8 @@ export default function Chat() {
       transports: ["websocket", "polling", "flashsocket"],
     }); // Replace with your server URL
 
+    // Join the chat room for the specified course
+    socketRef.current.emit("join room", courseId);
     // Listen for incoming messages from the server
     socketRef.current.on("chat message", (message: Message) => {
       setMessages((messages) => [...messages, message]);
@@ -63,7 +68,10 @@ export default function Chat() {
 
   const handleSendMessage = () => {
     if (newMessage && username) {
-      socket.emit("chat message", { user: username, text: newMessage });
+      socket.emit("chat message", courseId, {
+        user: username,
+        text: newMessage,
+      });
       setNewMessage("");
     }
   };

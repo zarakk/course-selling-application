@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card, CardContent, CircularProgress, Typography } from "@mui/material";
 import axiosInstance from "../utils/axiosInstance";
 import { CoursesType } from "../custom";
 import { Link } from "react-router-dom";
@@ -21,6 +21,10 @@ function PurchasedCourses() {
   useEffect(() => {
     fetchCourses();
   }, []);
+
+  if (!courses) {
+    return <CircularProgress />;
+  }
 
   return (
     <div>

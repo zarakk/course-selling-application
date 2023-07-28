@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import Chat from "../components/Chat";
 
 interface Course {
@@ -26,9 +26,8 @@ export default function PurchasedCourseRoomPage() {
   }, [courseId]);
 
   if (!course) {
-    return <div>Loading...</div>;
+    return <CircularProgress />;
   }
-  console.log("Rendering ParentComponent");
   return (
     <Box>
       <Typography variant="h4">{course.title}</Typography>
