@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import axiosInstance from "../utils/axiosInstance";
 import { useRecoilState } from "recoil";
-import { adminnameState } from "../state/adminnameState";
+import { adminnameState } from "../store/adminnameState";
 
 const Register = () => {
   const [username, setUsername] = useRecoilState(adminnameState);
@@ -30,7 +30,7 @@ const Register = () => {
         password,
       });
       if (response.data.token) {
-        localStorage.setItem("user-token", response.data.token);
+        localStorage.setItem("admin-token", response.data.token);
         setMessage("Signed up successfully!");
         setSeverity("success");
         setOpen(true);

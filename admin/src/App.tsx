@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import ShowCourses from "./pages/ShowCourses";
 import EditCourse from "./pages/EditCourse";
 import LiveCourse from "./pages/LiveCourse";
+import Navbar from "./components/Navbar";
 
 // This file shows how you can do routing in React.
 // Try going to /login, /register, /about, /courses on the website and see how the html changes
@@ -16,28 +17,7 @@ import LiveCourse from "./pages/LiveCourse";
 function App() {
   return (
     <Router>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            Admin Dashboard
-          </Typography>
-          <Button color="inherit" component={Link} to="/">
-            Home
-          </Button>
-          <Button color="inherit" component={Link} to="/courses">
-            Courses
-          </Button>
-          <Button color="inherit" component={Link} to="/login">
-            Login
-          </Button>
-          <Button color="inherit" component={Link} to="/register">
-            Signup
-          </Button>
-          <Button color="inherit" component={Link} to="/create">
-            Create
-          </Button>
-        </Toolbar>
-      </AppBar>
+      <Navbar />
       <Container>
         <Routes>
           <Route path="/" element={<Landing />} />

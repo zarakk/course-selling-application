@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useRecoilState } from "recoil";
-import { adminnameState } from "../state/adminnameState";
+import { adminnameState } from "../store/adminnameState";
 import { useParams } from "react-router-dom";
 const socket = io("http://localhost:3000/", {
   transports: ["websocket", "polling", "flashsocket"],
@@ -36,8 +36,7 @@ export default function Chat() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [username] = useRecoilState(adminnameState);
-
+  const [username, setUsername] = useRecoilState(adminnameState);
   useEffect(() => {
     // Initialize the socket.io client
     socketRef.current = io("http://localhost:3000/", {
@@ -102,6 +101,11 @@ export default function Chat() {
           ))}
         </List>
         <div>
+          <TextField
+            label="Username"
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+          />
           <TextField
             label="Message"
             value={newMessage}

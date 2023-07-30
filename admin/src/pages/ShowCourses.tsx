@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  ListItem,
+  Typography,
+} from "@mui/material";
 import axiosInstance from "../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +26,7 @@ const ShowCourses = () => {
   async function fetchCourses() {
     const response = await axiosInstance.get("/admin/courses", {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("user-token")}`,
+        Authorization: `Bearer ${localStorage.getItem("admin-token")}`,
       },
     });
     setCourses(response.data.courses);
@@ -31,22 +38,25 @@ const ShowCourses = () => {
   }, []);
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="md">
       <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+        <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 6 }}>
           Show Courses Page
         </Typography>
-        {courses.map((c) => (
-          <Course
-            key={c.id}
-            title={c.title}
-            imageLink={c.imageLink}
-            description={c.description}
-            published={c.published}
-            price={c.price}
-            id={c.id}
-          />
-        ))}
+        <Grid container>
+          {courses.map((c) => (
+            <Grid xs={6} key={c.id}>
+              <Course
+                title={c.title}
+                imageLink={c.imageLink}
+                description={c.description}
+                published={c.published}
+                price={c.price}
+                id={c.id}
+              />
+            </Grid>
+          ))}
+        </Grid>
       </Box>
     </Container>
   );
@@ -61,15 +71,18 @@ const Course = ({
   price,
 }: Course) => {
   const navigate = useNavigate();
-  const editRoute = () => {
+  const editCourseRoute = () => {
     navigate(`/courses/${id}`);
   };
-
+  const courseDetailsRoute = () => {
+    navigate(`/courses/details/${id}`);
+  };
   return (
     <Box
       sx={{
-        my: 2,
+        margin: 2,
         p: 4,
+        minHeight: 300,
         border: 2,
         display: "flex",
         justifyContent: "center",
@@ -79,9 +92,8 @@ const Course = ({
           backgroundColor: "#f5f5f5",
         },
       }}
-      onClick={editRoute}
     >
-      <img src={imageLink} alt={title} width={200} />
+      <img src={imageLink} alt={title} width={200} height={200} />
       <Typography variant="h5" component="h2">
         {title}
       </Typography>
@@ -94,6 +106,23 @@ const Course = ({
       <Typography variant="subtitle1" component="p">
         Published on: {new Date(published).toLocaleDateString()}
       </Typography>
+
+      <Button
+        color="primary"
+        variant="contained"
+        onClick={courseDetailsRoute}
+        sx={{ mt: 2 }}
+      >
+        Course Details
+      </Button>
+      <Button
+        color="secondary"
+        variant="outlined"
+        onClick={editCourseRoute}
+        sx={{ mt: 2 }}
+      >
+        Edit Course
+      </Button>
     </Box>
   );
 };

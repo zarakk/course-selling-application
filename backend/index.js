@@ -414,6 +414,30 @@ app.post("/users/courses/:courseId", isUserAuthenticated, (req, res) => {
 });
 
 // Define a user route to purchase a course
+app.get("/admin/course/:courseId", (req, res) => {
+  // Get the course id from the URL path parameter
+  const courseId = parseInt(req.params.courseId);
+
+  // Validate the input parameter
+  if (isNaN(courseId)) {
+    return res.status(400).json({ message: "Invalid course id" });
+  }
+
+  // Read the purchase data from the file
+  const courses = readData("courses.json");
+
+  // Check if the user has already purchased this course
+  const existingCourse = courses.find((course) => course.id === courseId);
+  console.log(courseId);
+  console.log(existingCourse);
+  if (existingCourse) {
+    return res.status(200).json(courses[courseId]);
+  }
+
+  res.status(401).json({ message: "Course is not available" });
+});
+
+// Define a user route to purchase a course
 app.get("/users/purchase/course/:courseId", (req, res) => {
   // Get the course id from the URL path parameter
   const courseId = parseInt(req.params.courseId);
