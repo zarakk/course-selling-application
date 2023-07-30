@@ -1,11 +1,14 @@
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { AppBar, Toolbar, Typography, Button, Container } from "@mui/material";
-import Login from "./components/Login";
-import Landing from "./components/Landing";
-import CreateCourse from "./components/CreateCourse";
-import Register from "./components/Register";
-import ShowCourses from "./components/ShowCourses";
-import EditCourse from "./components/EditCourse";
+import Login from "./pages/Login";
+import Landing from "./pages/Landing";
+import CreateCourse from "./pages/CreateCourse";
+import Register from "./pages/Register";
+import ShowCourses from "./pages/ShowCourses";
+import EditCourse from "./pages/EditCourse";
+import LiveCourse from "./pages/LiveCourse";
+import Navbar from "./components/Navbar";
 
 // This file shows how you can do routing in React.
 // Try going to /login, /register, /about, /courses on the website and see how the html changes
@@ -14,28 +17,7 @@ import EditCourse from "./components/EditCourse";
 function App() {
   return (
     <Router>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            Admin Dashboard
-          </Typography>
-          <Button color="inherit" component={Link} to="/">
-            Home
-          </Button>
-          <Button color="inherit" component={Link} to="/courses">
-            Courses
-          </Button>
-          <Button color="inherit" component={Link} to="/login">
-            Login
-          </Button>
-          <Button color="inherit" component={Link} to="/register">
-            Signup
-          </Button>
-          <Button color="inherit" component={Link} to="/create">
-            Create
-          </Button>
-        </Toolbar>
-      </AppBar>
+      <Navbar />
       <Container>
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -44,6 +26,7 @@ function App() {
           <Route path="/create" element={<CreateCourse />} />
           <Route path="/courses" element={<ShowCourses />} />
           <Route path="/courses/:id" element={<EditCourse />} />
+          <Route path="/courses/details/:id" element={<LiveCourse />} />
         </Routes>
       </Container>
     </Router>

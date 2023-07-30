@@ -414,6 +414,30 @@ app.post("/users/courses/:courseId", isUserAuthenticated, (req, res) => {
 });
 
 // Define a user route to purchase a course
+app.get("/admin/course/:courseId", (req, res) => {
+  // Get the course id from the URL path parameter
+  const courseId = parseInt(req.params.courseId);
+
+  // Validate the input parameter
+  if (isNaN(courseId)) {
+    return res.status(400).json({ message: "Invalid course id" });
+  }
+
+  // Read the purchase data from the file
+  const courses = readData("courses.json");
+
+  // Check if the user has already purchased this course
+  const existingCourse = courses.find((course) => course.id === courseId);
+  console.log(courseId);
+  console.log(existingCourse);
+  if (existingCourse) {
+    return res.status(200).json(courses[courseId]);
+  }
+
+  res.status(401).json({ message: "Course is not available" });
+});
+
+// Define a user route to purchase a course
 app.get("/users/purchase/course/:courseId", (req, res) => {
   // Get the course id from the URL path parameter
   const courseId = parseInt(req.params.courseId);
@@ -471,14 +495,13 @@ app.get("/users/purchasedCourses", isUserAuthenticated, (req, res) => {
 const server = app.listen(3000, () => {
   console.log("listening on *:3000");
 });
-
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",
-    // allowedHeaders: ["my-custom-header"],
     credentials: true,
   },
 });
+
 io.on("connection", (socket) => {
   console.log("a user connected");
 
@@ -498,6 +521,24 @@ io.on("connection", (socket) => {
   socket.on("chat message", (room, msg) => {
     // Send the message to all sockets in the specified room
     io.to(room).emit("chat message", msg);
+  });
+
+  // Listen for the 'offer' event
+  socket.on("offer", (description) => {
+    // Send the offer to all other sockets in the same room
+    socket.to(socket.rooms).emit("offer", socket.id, description);
+  });
+
+  // Listen for the 'answer' event
+  socket.on("answer", (id, description) => {
+    // Send the answer to the specified socket
+    io.to(id).emit("answer", description);
+  });
+
+  // Listen for the 'candidate' event
+  socket.on("candidate", (candidate) => {
+    // Send the candidate to all other sockets in the same room
+    socket.to(socket.rooms).emit("candidate", socket.id, candidate);
   });
 
   socket.on("disconnect", () => {

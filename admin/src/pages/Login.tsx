@@ -10,9 +10,11 @@ import {
   Alert,
 } from "@mui/material";
 import axiosInstance from "../utils/axiosInstance";
+import { useRecoilState } from "recoil";
+import { adminnameState } from "../store/adminnameState";
 
 const Login = () => {
-  const [username, setUsername] = React.useState("");
+  const [username, setUsername] = useRecoilState(adminnameState);
   const [password, setPassword] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [message, setMessage] = React.useState("");
@@ -28,7 +30,7 @@ const Login = () => {
         password,
       });
       if (response.data.token) {
-        localStorage.setItem("user-token", response.data.token);
+        localStorage.setItem("admin-token", response.data.token);
         setMessage("Logged in successfully!");
         setSeverity("success");
         setOpen(true);
