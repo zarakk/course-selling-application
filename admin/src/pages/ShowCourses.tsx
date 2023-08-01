@@ -36,7 +36,7 @@ const ShowCourses = () => {
   useEffect(() => {
     fetchCourses();
   }, []);
-
+  console.log(courses);
   return (
     <Container maxWidth="md">
       <Box sx={{ my: 4 }}>
@@ -93,7 +93,12 @@ const Course = ({
         },
       }}
     >
-      <img src={imageLink} alt={title} width={200} height={200} />
+      <img
+        src={imageLink || `${imageLink}.png`}
+        alt={title}
+        width={200}
+        height={200}
+      />
       <Typography variant="h5" component="h2">
         {title}
       </Typography>

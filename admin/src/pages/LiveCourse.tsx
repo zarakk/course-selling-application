@@ -11,6 +11,7 @@ import {
 import Chat from "../components/Chat";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
+import VideoUpload from "../components/VideoUpload";
 
 interface Course {
   title: string;
@@ -32,6 +33,7 @@ const LiveCourse: React.FC = () => {
   const fetchCourse = async () => {
     const response = await axiosInstance(`/admin/course/${id}`);
     // const data = response.json();
+    console.log(response);
     setCourse(response.data);
   };
   useEffect(() => {
@@ -121,13 +123,14 @@ const LiveCourse: React.FC = () => {
       });
   };
 
+  const uploadVideo = () => {};
   return (
     <>
       <Box
         sx={{
           height: 200,
           width: "100%",
-          backgroundImage: `url(${course?.imageLink})`,
+          backgroundImage: `url(http://localhost:3000${course?.imageLink})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundColor: "rgba(1,1,1,1.5)",
@@ -143,7 +146,7 @@ const LiveCourse: React.FC = () => {
               {course?.description}
             </Typography>
             <Typography variant="subtitle1" component="p">
-              Published on: {course?.published}
+              {course?.published ? `Published on: ${course?.published})` : ""}
             </Typography>
           </Box>
         </Box>
@@ -158,6 +161,7 @@ const LiveCourse: React.FC = () => {
             </Button>
           </DialogContent>
         </Dialog>
+        <VideoUpload />
         <Chat />
       </Container>
     </>

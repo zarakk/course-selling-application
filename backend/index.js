@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
+app.use("/uploads", express.static("uploads"));
 
 app.use(express.json());
 const { Server } = require("socket.io");
@@ -508,6 +509,31 @@ app.get("/users/purchasedCourses", isUserAuthenticated, (req, res) => {
 
   res.status(200).json({ purchasedCourses });
 });
+
+app.post(
+  "/upload-video",
+  isAdminAuthenticated,
+  upload.single("video"),
+  (req, res) => {
+    // Get the uploaded video file from the request
+    const videoFile = req.file;
+
+    // Validate the input parameters
+    if (!videoFile) {
+      return res.status(400).json({ message: "Missing video file" });
+    }
+
+    // Process and save the uploaded video file
+    const videoFileName = `${Date.now()}-${videoFile.originalname}`;
+    const videoFilePath = `videos/${videoFileName}`;
+    fs.rename(videoFile.path, videoFilePath, (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Error saving video file" });
+      } // Send a success response with a message
+      res.status(200).json({ message: "Video uploaded successfully" });
+    });
+  }
+);
 
 // Start listening for incoming requests
 const server = app.listen(3000, () => {

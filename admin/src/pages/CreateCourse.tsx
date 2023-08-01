@@ -132,7 +132,7 @@ function CreateCourse() {
               />
             </Button>
           </FormControl>
-          <FormControl>
+          {/* <FormControl>
             <Button variant="outlined" color="primary" component="label">
               Upload Video
               <input
@@ -146,7 +146,7 @@ function CreateCourse() {
                 }
               />
             </Button>
-          </FormControl>
+          </FormControl> */}
           <TextField
             margin="normal"
             required
