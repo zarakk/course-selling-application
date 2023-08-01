@@ -31,6 +31,7 @@ const Login = () => {
       });
       if (response.data.token) {
         localStorage.setItem("admin-token", response.data.token);
+        localStorage.setItem("admin", username);
         setMessage("Logged in successfully!");
         setSeverity("success");
         setOpen(true);

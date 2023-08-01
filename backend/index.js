@@ -27,7 +27,6 @@ const SECRET_KEY = "azs";
 const readData = (fileName) => {
   try {
     const data = fs.readFileSync(fileName, "utf8");
-    console.log(data);
     return JSON.parse(data);
   } catch (error) {
     console.error(error);
@@ -95,15 +94,12 @@ const isAdminAuthenticated = (req, res, next) => {
 const isUserAuthenticated = (req, res, next) => {
   // Get the authorization header from the request
   const authHeader = req.headers.authorization;
-  console.log("authheader", authHeader);
   // Check if the header exists and has the format 'Bearer token'
   if (authHeader && authHeader.startsWith("Bearer ")) {
     // Extract the token from the header
     const token = authHeader.split(" ")[1];
-    console.log("token", token);
     // Verify the token
     const decoded = verifyToken(token);
-    console.log("decoded", decoded);
     // Check if the token is valid and has the role 'user'
     if (decoded && decoded.role === "user") {
       // Attach the decoded payload to the request object
@@ -367,7 +363,6 @@ app.post("/users/login", (req, res) => {
   const existingUser = users.find(
     (user) => user.username === username && user.password === password
   );
-  console.log(existingUser);
   if (!existingUser) {
     return res.status(401).json({ message: "Invalid username or password" });
   }
@@ -447,8 +442,6 @@ app.get("/admin/course/:courseId", (req, res) => {
 
   // Check if the user has already purchased this course
   const existingCourse = courses.find((course) => course.id === courseId);
-  console.log(courseId);
-  console.log(existingCourse);
   if (existingCourse) {
     return res.status(200).json(courses[courseId]);
   }
@@ -515,12 +508,15 @@ app.post(
   isAdminAuthenticated,
   upload.single("video"),
   (req, res) => {
-    // Get the uploaded video file from the request
+    // Get the uploaded video file, title, and username from the request
     const videoFile = req.file;
-
+    const { title, username } = req.body;
+    console.log(title, username);
     // Validate the input parameters
-    if (!videoFile) {
-      return res.status(400).json({ message: "Missing video file" });
+    if (!videoFile || !title || !username) {
+      return res
+        .status(400)
+        .json({ message: "Missing video file or title or username" });
     }
 
     // Process and save the uploaded video file
@@ -529,11 +525,45 @@ app.post(
     fs.rename(videoFile.path, videoFilePath, (err) => {
       if (err) {
         return res.status(500).json({ message: "Error saving video file" });
-      } // Send a success response with a message
-      res.status(200).json({ message: "Video uploaded successfully" });
+      }
+
+      // Save the video data to a file
+      const videoData = { title, username, filePath: videoFilePath };
+      fs.appendFile("videos.json", JSON.stringify(videoData) + "\n", (err) => {
+        if (err) {
+          return res.status(500).json({ message: "Error saving video data" });
+        }
+
+        // Send a success response with a message
+        res.status(200).json({ message: "Video uploaded successfully" });
+      });
     });
   }
 );
+
+app.post("/videos", (req, res) => {
+  // Get the username from the URL path parameter
+  const username = req.body.username;
+
+  // Read the video data from the file
+  fs.readFile("videos.json", "utf-8", (err, data) => {
+    if (err) {
+      return res.status(500).json({ message: "Error reading video data" });
+    }
+
+    // Parse the video data
+    const videos = data
+      .trim()
+      .split("\n")
+      .map((line) => JSON.parse(line));
+
+    // Filter the videos by username
+    const userVideos = videos.filter((video) => video.username === username);
+
+    // Send a success response with the video data
+    res.status(200).json(userVideos);
+  });
+});
 
 // Start listening for incoming requests
 const server = app.listen(3000, () => {
