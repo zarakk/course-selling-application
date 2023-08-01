@@ -24,7 +24,7 @@ function Navbar() {
             <Button color="inherit" component={Link} to="/courses">
               Courses
             </Button>
-            <Button color="inherit" component={Link} to="/courses/create">
+            <Button color="inherit" component={Link} to="/create">
               Create
             </Button>
             <Button color="inherit" onClick={logout}>

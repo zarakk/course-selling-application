@@ -12,6 +12,13 @@ import Chat from "../components/Chat";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 
+interface Course {
+  title: string;
+  price: number;
+  description: string;
+  imageLink: string;
+  published: string;
+}
 type Socket = any;
 //  SocketIOClient.Socket;
 
@@ -20,7 +27,7 @@ const LiveCourse: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [course, setCourse] = useState();
+  const [course, setCourse] = useState<Course | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const fetchCourse = async () => {
     const response = await axiosInstance(`/admin/course/${id}`);
@@ -115,45 +122,45 @@ const LiveCourse: React.FC = () => {
   };
 
   return (
-    <Container maxWidth={"md"}>
-      <Box>
-        <Box
-          sx={{
-            height: 200,
-            width: "100%",
-            backgroundImage: `url(${course?.imageLink})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h5" component="h2">
-            {course?.title}
-          </Typography>
-          <Typography variant="body1" component="p" sx={{ my: 1 }}>
-            {course?.description}
-          </Typography>
-          <Typography variant="h6" component="h2">
-            ${course?.price}
-          </Typography>
-          <Typography variant="subtitle1" component="p">
-            Published on: {course?.published}
-          </Typography>
+    <>
+      <Box
+        sx={{
+          height: 200,
+          width: "100%",
+          backgroundImage: `url(${course?.imageLink})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundColor: "rgba(1,1,1,1.5)",
+        }}
+      />
+      <Container maxWidth={"md"}>
+        <Box>
+          <Box sx={{ p: 2 }}>
+            <Typography variant="h5" component="h2">
+              {course?.title}
+            </Typography>
+            <Typography variant="body1" component="p" sx={{ my: 1 }}>
+              {course?.description}
+            </Typography>
+            <Typography variant="subtitle1" component="p">
+              Published on: {course?.published}
+            </Typography>
+          </Box>
         </Box>
-      </Box>
-      <Button variant="contained" disabled onClick={handleOpen}>
-        Go Live
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogContent>
-          <video ref={videoRef} autoPlay />
-          <Button variant="contained" onClick={handleGoLive}>
-            Start Streaming
-          </Button>
-        </DialogContent>
-      </Dialog>
-      <Chat />
-    </Container>
+        <Button variant="contained" disabled onClick={handleOpen}>
+          Go Live
+        </Button>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogContent>
+            <video ref={videoRef} autoPlay />
+            <Button variant="contained" onClick={handleGoLive}>
+              Start Streaming
+            </Button>
+          </DialogContent>
+        </Dialog>
+        <Chat />
+      </Container>
+    </>
   );
 };
 

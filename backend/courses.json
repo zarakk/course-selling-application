@@ -14,5 +14,13 @@
     "price": "199",
     "imageLink": "https://javascriptforwp.com/wp-content/uploads/2019/10/1-2.png",
     "published": "2023-07-12T17:39:38.221Z"
+  },
+  {
+    "id": 3,
+    "title": "new course ",
+    "description": "this is a new experimental course",
+    "price": "399",
+    "imageLink": "/uploads/70c6fcf397bbc41208071f73e469e7d0",
+    "videoLink": null
   }
 ]

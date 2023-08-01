@@ -8,6 +8,9 @@ import {
   Typography,
   Snackbar,
   Alert,
+  FormControl,
+  InputLabel,
+  Input,
 } from "@mui/material";
 
 interface CourseData {
@@ -41,6 +44,7 @@ function CreateCourse() {
       formData.append("title", title);
       formData.append("description", description);
       formData.append("price", price);
+
       if (imageFile) {
         formData.append("image", imageFile);
       }
@@ -51,7 +55,7 @@ function CreateCourse() {
       // Send request to create course
       await axiosInstance.post<CourseData>("/admin/courses", formData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("user-token")}`,
+          Authorization: `Bearer ${localStorage.getItem("admin-token")}`,
           "Content-Type": "multipart/form-data",
         },
       });
@@ -113,26 +117,36 @@ function CreateCourse() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          <label htmlFor="image">Image</label>
-          <input
-            type="file"
-            id="image"
-            name="image"
-            accept="image/*"
-            onChange={(e) =>
-              setImageFile(e.target.files ? e.target.files[0] : null)
-            }
-          />
-          <label htmlFor="video">Video</label>
-          <input
-            type="file"
-            id="video"
-            name="video"
-            accept="video/*"
-            onChange={(e) =>
-              setVideoFile(e.target.files ? e.target.files[0] : null)
-            }
-          />
+          <FormControl>
+            <Button variant="outlined" component="label">
+              Upload Image
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                hidden
+                onChange={(e) =>
+                  setImageFile(e.target.files ? e.target.files[0] : null)
+                }
+              />
+            </Button>
+          </FormControl>
+          <FormControl>
+            <Button variant="outlined" color="primary" component="label">
+              Upload Video
+              <input
+                type="file"
+                id="video"
+                name="video"
+                accept="video/*"
+                hidden
+                onChange={(e) =>
+                  setVideoFile(e.target.files ? e.target.files[0] : null)
+                }
+              />
+            </Button>
+          </FormControl>
           <TextField
             margin="normal"
             required

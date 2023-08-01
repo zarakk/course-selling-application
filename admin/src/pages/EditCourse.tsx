@@ -51,7 +51,7 @@ function EditCourse() {
   async function fetchCourse() {
     const response = await axiosInstance.get(`/admin/courses`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("user-token")}`,
+        Authorization: `Bearer ${localStorage.getItem("admin-token")}`,
       },
     });
     response.data.courses.map((course: CourseReturnType) => {

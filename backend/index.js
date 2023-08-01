@@ -5,6 +5,8 @@ app.use(cors());
 
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 app.use(express.json());
 const { Server } = require("socket.io");
@@ -184,104 +186,120 @@ app.post("/admin/login", (req, res) => {
 });
 
 // Define an admin route to create a new course
-app.post("/admin/courses", isAdminAuthenticated, (req, res) => {
-  // Get the course data from the request body
-  const { title, description, price, imageLink, published } = req.body;
 
-  // Validate the input parameters
-  if (
-    !title ||
-    !description ||
-    !price ||
-    !imageLink ||
-    published === undefined
-  ) {
-    return res.status(400).json({ message: "Missing course data" });
+// Define an admin route to create a new course
+app.post(
+  "/admin/courses",
+  isAdminAuthenticated,
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "video", maxCount: 1 },
+  ]),
+  (req, res) => {
+    // Get the course data from the request body
+    const { title, description, price, published } = req.body;
+
+    // Get the image and video files from the request
+    const imageFile = req.files["image"][0];
+    const videoFile = req.files["video"] ? req.files["video"][0] : null;
+
+    // Validate the input parameters
+    if (!title || !description || !price || !imageFile === undefined) {
+      return res.status(400).json({ message: "Missing course data" });
+    }
+
+    // Read the course data from the file
+    const courses = readData("courses.json");
+
+    // Create a new course object with an id
+    const newCourse = {
+      id: courses.length + 1,
+      title,
+      description,
+      price,
+      imageLink: `/uploads/${imageFile.filename}`,
+      videoLink: videoFile ? `/uploads/${videoFile.filename}` : null,
+      published,
+    };
+
+    // Add the new course to the array of courses
+    courses.push(newCourse);
+
+    // Write the updated course data to the file
+    writeData("courses.json", courses);
+
+    // Send a success response with the course id
+    res.status(201).json({
+      message: "Course created successfully",
+      courseId: newCourse.id,
+    });
   }
-
-  // Read the course data from the file
-  const courses = readData("courses.json");
-
-  // Create a new course object with an id
-  const newCourse = {
-    id: courses.length + 1,
-    title,
-    description,
-    price,
-    imageLink,
-    published,
-  };
-
-  // Add the new course to the array of courses
-  courses.push(newCourse);
-
-  // Write the updated course data to the file
-  writeData("courses.json", courses);
-
-  // Send a success response with the course id
-  res
-    .status(201)
-    .json({ message: "Course created successfully", courseId: newCourse.id });
-});
+);
 
 // Define an admin route to edit an existing course
-app.put("/admin/courses/:courseId", isAdminAuthenticated, (req, res) => {
-  // Get the course id from the URL path parameter
-  const courseId = parseInt(req.params.courseId);
+app.put(
+  "/admin/courses/:courseId",
+  isAdminAuthenticated,
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "video", maxCount: 1 },
+  ]),
+  (req, res) => {
+    // Get the course id from the URL path parameter
+    const courseId = parseInt(req.params.courseId);
 
-  // Validate the input parameter
-  if (isNaN(courseId)) {
-    return res.status(400).json({ message: "Invalid course id" });
+    // Validate the input parameter
+    if (isNaN(courseId)) {
+      return res.status(400).json({ message: "Invalid course id" });
+    }
+
+    // Get the updated course data from the request body
+    const { title, description, price, published } = req.body;
+
+    // Get the image and video files from the request
+    const imageFile = req.files["image"] ? req.files["image"][0] : null;
+    const videoFile = req.files["video"] ? req.files["video"][0] : null;
+
+    // Validate the input parameters
+    if (!title || !description || !price || published === undefined) {
+      return res.status(400).json({ message: "Missing course data" });
+    }
+
+    // Read the course data from the file
+    const courses = readData("courses.json");
+
+    // Find the index of the course to be edited in the array of courses
+    const index = courses.findIndex((course) => course.id === courseId);
+
+    // Check if the index is valid
+    if (index === -1) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    // Update the course object with the new data
+    courses[index] = {
+      ...courses[index],
+      title,
+      description,
+      price,
+      imageLink: imageFile
+        ? `/uploads/${imageFile.filename}`
+        : courses[index].imageLink,
+      videoLink: videoFile
+        ? `/uploads/${videoFile.filename}`
+        : courses[index].videoLink,
+      published,
+    };
+
+    // Write the updated course data to the file
+    writeData("courses.json", courses);
+
+    // Send a success response
+    res.status(200).json({ message: "Course updated successfully" });
   }
-
-  // Get the updated course data from the request body
-  const { title, description, price, imageLink, published } = req.body;
-
-  // Validate the input parameters
-  if (
-    !title ||
-    !description ||
-    !price ||
-    !imageLink ||
-    published === undefined
-  ) {
-    return res.status(400).json({ message: "Missing course data" });
-  }
-
-  // Read the course data from the file
-  const courses = readData("courses.json");
-
-  // Find the index of the course to be edited in the array of courses
-  const index = courses.findIndex((course) => course.id === courseId);
-
-  // Check if the index is valid
-
-  if (index === -1) {
-    return res.status(404).json({ message: "Course not found" });
-  }
-
-  // Update the course object with the new data
-
-  courses[index] = {
-    ...courses[index],
-    title,
-    description,
-    price,
-    imageLink,
-    published,
-  };
-
-  // Write the updated course data to the file
-
-  writeData("courses.json", courses);
-
-  // Send a success response
-
-  res.status(200).json({ message: "Course updated successfully" });
-});
+);
 
 // Define an admin route to return all the courses
-
 app.get("/admin/courses", isAdminAuthenticated, (req, res) => {
   // Read the course data from the file
 
