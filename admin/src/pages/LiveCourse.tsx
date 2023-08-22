@@ -136,7 +136,7 @@ const LiveCourse: React.FC = () => {
           backgroundColor: "rgba(1,1,1,1.5)",
         }}
       />
-      <Container maxWidth={"md"}>
+      <Container maxWidth={"lg"}>
         <Box>
           <Box sx={{ p: 2 }}>
             <Typography variant="h5" component="h2">

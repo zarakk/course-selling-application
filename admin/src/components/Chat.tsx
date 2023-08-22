@@ -8,6 +8,7 @@ import {
   ListItem,
   ListItemText,
   TextField,
+  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useRecoilState } from "recoil";
@@ -77,9 +78,15 @@ export default function Chat() {
 
   return (
     <ChatContainer
-      sx={{ border: "1px solid black", padding: 2, backgroundColor: "white" }}
+      sx={{
+        border: "1px solid black",
+        padding: 2,
+        backgroundColor: "white",
+        cursor: "pointer",
+      }}
+      onClick={handleToggleOpen}
     >
-      <Button onClick={handleToggleOpen}>Chat</Button>
+      <Typography>Chat</Typography>
       <Collapse in={open}>
         <List
           sx={{

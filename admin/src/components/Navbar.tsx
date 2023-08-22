@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Button } from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
@@ -12,15 +12,14 @@ function Navbar() {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Button color="inherit" component={Link} to="/">
-          Home
-        </Button>
+        <Box sx={{ flexGrow: 1 }}>
+          <Button color="inherit" component={Link} to="/">
+            Admin Dashboard
+          </Button>
+        </Box>
 
         {isLoggedIn ? (
           <>
-            <Typography variant="h6" style={{ flexGrow: 1 }}>
-              Admin Dashboard
-            </Typography>
             <Button color="inherit" component={Link} to="/courses">
               Courses
             </Button>

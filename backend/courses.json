@@ -22,5 +22,13 @@
     "price": "399",
     "imageLink": "/uploads/70c6fcf397bbc41208071f73e469e7d0",
     "videoLink": null
+  },
+  {
+    "id": 4,
+    "title": "rust",
+    "description": "course about rust ",
+    "price": "322",
+    "imageLink": "/uploads/9a47ef7beae4b6306a76cc81c5725fe5",
+    "videoLink": null
   }
 ]

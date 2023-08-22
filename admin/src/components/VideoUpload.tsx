@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
+  Box,
   Button,
   CircularProgress,
   Dialog,
@@ -7,8 +8,15 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Typography,
 } from "@mui/material";
 import axiosInstance from "../utils/axiosInstance";
+
+interface VideoInfo {
+  title: string;
+  file: File;
+  url: string;
+}
 
 const VideoUpload = () => {
   const [videoFile, setVideoFile] = useState<File | null>(null);
@@ -17,7 +25,8 @@ const VideoUpload = () => {
   const [uploaded, setUploaded] = useState(false);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
-  const [videoInfo, setVideoInfo] = useState([]);
+  const [videos, setVideos] = useState<VideoInfo[]>([]);
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -63,29 +72,29 @@ const VideoUpload = () => {
       setUploading(false);
       setUploaded(true);
 
+      // Update videos state
+      setVideos((videos) => [...videos, { title, file, url: previewUrl }]);
+
       // Display a success message
       alert(data.message);
-      setOpen(false);
     }
   };
-
-  const getVideos = async () => {
-    const response = await axiosInstance.post("/videos", {
-      username: localStorage.getItem("admin"),
-    });
-
-    console.log(response.data);
-  };
-
-  useEffect(() => {
-    getVideos();
-  }, []);
 
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleOpen}>
         Upload Video
       </Button>
+
+      <Box sx={{ display: "flex", flexGap: 2 }}>
+        {videos.map((video) => (
+          <Box sx={{ display: "flex", flexDirection: "column", p: 4 }}>
+            <Typography variant="h6">{video.title}</Typography>
+            <video src={video.url} width="320" height="240" controls />
+          </Box>
+        ))}
+      </Box>
+
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Upload Video</DialogTitle>
         <DialogContent>

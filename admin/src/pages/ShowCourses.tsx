@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import axiosInstance from "../utils/axiosInstance";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Course {
   title: string;
@@ -21,15 +21,19 @@ interface Course {
 
 const ShowCourses = () => {
   const [courses, setCourses] = useState<Course[]>([]);
-
+  const [error, setError] = useState(false);
   // Function to fetch all courses from the backend
   async function fetchCourses() {
-    const response = await axiosInstance.get("/admin/courses", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("admin-token")}`,
-      },
-    });
-    setCourses(response.data.courses);
+    try {
+      const response = await axiosInstance.get("/admin/courses", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("admin-token")}`,
+        },
+      });
+      setCourses(response.data.courses);
+    } catch (error) {
+      setError(true);
+    }
   }
 
   // Fetch all courses when the component mounts
@@ -44,18 +48,34 @@ const ShowCourses = () => {
           Show Courses Page
         </Typography>
         <Grid container>
-          {courses.map((c) => (
-            <Grid xs={6} key={c.id}>
-              <Course
-                title={c.title}
-                imageLink={c.imageLink}
-                description={c.description}
-                published={c.published}
-                price={c.price}
-                id={c.id}
-              />
-            </Grid>
-          ))}
+          {error ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="h4">
+                Please <Link to="/login">Login</Link> to see Courses
+              </Typography>
+            </Box>
+          ) : (
+            <>
+              {courses.map((c) => (
+                <Grid xs={6} key={c.id}>
+                  <Course
+                    title={c.title}
+                    imageLink={c.imageLink}
+                    description={c.description}
+                    published={c.published}
+                    price={c.price}
+                    id={c.id}
+                  />
+                </Grid>
+              ))}
+            </>
+          )}
         </Grid>
       </Box>
     </Container>
