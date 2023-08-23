@@ -2,6 +2,15 @@
 
 This is a full-stack course selling application that allows users to browse, purchase, and participate in online courses. It uses React, TypeScript, Node, and Socket.io for real-time communication.
 
+## Admin Facing Demo
+
+https://github.com/zarakk/course-selling-application/assets/52151884/3a435dee-dc5a-4f2d-b180-1d444f97ba5c
+
+## User Facing Demo
+
+https://github.com/zarakk/course-selling-application/assets/52151884/e32e6fea-6226-4273-b322-53280557de00
+
+
 ## Features
 
 - User-facing side:
