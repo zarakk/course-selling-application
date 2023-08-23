@@ -33,7 +33,7 @@ const LiveCourse: React.FC = () => {
   const fetchCourse = async () => {
     const response = await axiosInstance(`/admin/course/${id}`);
     // const data = response.json();
-    console.log(response);
+    console.log(response.data);
     setCourse(response.data);
   };
   useEffect(() => {

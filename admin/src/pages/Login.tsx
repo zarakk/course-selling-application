@@ -12,6 +12,7 @@ import {
 import axiosInstance from "../utils/axiosInstance";
 import { useRecoilState } from "recoil";
 import { adminnameState } from "../store/adminnameState";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = useRecoilState(adminnameState);
@@ -21,6 +22,7 @@ const Login = () => {
   const [severity, setSeverity] = React.useState<"success" | "error">(
     "success"
   );
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     // Handle form submission
@@ -35,6 +37,7 @@ const Login = () => {
         setMessage("Logged in successfully!");
         setSeverity("success");
         setOpen(true);
+        setTimeout(() => navigate("/courses"), 2000);
       } else {
         setMessage("An error occurred while logging in.");
         setSeverity("error");

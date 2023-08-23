@@ -44,6 +44,7 @@ function CreateCourse() {
       formData.append("title", title);
       formData.append("description", description);
       formData.append("price", price);
+      formData.append("published", Date());
 
       if (imageFile) {
         formData.append("image", imageFile);

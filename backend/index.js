@@ -303,7 +303,7 @@ app.get("/admin/courses", isAdminAuthenticated, (req, res) => {
   const courses = readData("courses.json");
 
   // Send a success response with the courses
-
+  console.log(courses);
   res.status(200).json({ courses });
 });
 
@@ -382,7 +382,7 @@ app.get("/users/courses", isUserAuthenticated, (req, res) => {
 
   // Filter only published courses
   const publishedCourses = courses.filter((course) => course.published);
-
+  console.log(publishedCourses);
   // Send a success response with the courses
   res.status(200).json({ courses: publishedCourses });
 });
@@ -443,7 +443,7 @@ app.get("/admin/course/:courseId", (req, res) => {
   // Check if the user has already purchased this course
   const existingCourse = courses.find((course) => course.id === courseId);
   if (existingCourse) {
-    return res.status(200).json(courses[courseId]);
+    return res.status(200).json(courses[courseId - 1]);
   }
 
   res.status(401).json({ message: "Course is not available" });

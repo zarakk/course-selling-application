@@ -115,6 +115,11 @@ const Course = ({
     >
       <img
         src={imageLink || `${imageLink}.png`}
+        style={{
+          backgroundImage: `url(http://localhost:3000${imageLink})`,
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+        }}
         alt={title}
         width={200}
         height={200}

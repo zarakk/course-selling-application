@@ -75,6 +75,8 @@ function EditCourse() {
       formData.append("title", title);
       formData.append("description", description);
       formData.append("price", price);
+      formData.append("published", Date());
+
       if (imageFile) {
         formData.append("image", imageFile);
       }
@@ -85,7 +87,7 @@ function EditCourse() {
       // Send request to update course
       await axiosInstance.put(`/admin/courses/${id}`, formData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("user-token")}`,
+          Authorization: `Bearer ${localStorage.getItem("admin-token")}`,
           "Content-Type": "multipart/form-data",
         },
       });

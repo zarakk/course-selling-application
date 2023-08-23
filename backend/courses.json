@@ -21,7 +21,8 @@
     "description": "this is a new experimental course",
     "price": "399",
     "imageLink": "/uploads/70c6fcf397bbc41208071f73e469e7d0",
-    "videoLink": null
+    "videoLink": null,
+    "published": "Wed Aug 23 2023 22:31:28 GMT+0500 (Pakistan Standard Time)"
   },
   {
     "id": 4,
@@ -29,6 +30,7 @@
     "description": "course about rust ",
     "price": "322",
     "imageLink": "/uploads/9a47ef7beae4b6306a76cc81c5725fe5",
-    "videoLink": null
+    "videoLink": null,
+    "published": "Wed Aug 23 2023 22:31:55 GMT+0500 (Pakistan Standard Time)"
   }
 ]
