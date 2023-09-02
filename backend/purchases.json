@@ -6,5 +6,9 @@
   {
     "userId": 5,
     "courseId": 1
+  },
+  {
+    "userId": 1,
+    "courseId": 1
   }
 ]

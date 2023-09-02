@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import axiosInstance from "../utils/axiosInstance";
 import { Link, useNavigate } from "react-router-dom";
+import LoginError from "../components/LoginError";
 
 interface Course {
   title: string;
@@ -40,30 +41,19 @@ const ShowCourses = () => {
   useEffect(() => {
     fetchCourses();
   }, []);
-  console.log(courses);
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="xl">
       <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 6 }}>
-          Show Courses Page
+        <Typography variant="h4" component="h4" gutterBottom sx={{ mb: 6 }}>
+          Courses to get you started
         </Typography>
         <Grid container>
           {error ? (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography variant="h4">
-                Please <Link to="/login">Login</Link> to see Courses
-              </Typography>
-            </Box>
+            <LoginError />
           ) : (
             <>
               {courses.map((c) => (
-                <Grid xs={6} key={c.id}>
+                <Grid xs={4} key={c.id}>
                   <Course
                     title={c.title}
                     imageLink={c.imageLink}
@@ -103,7 +93,6 @@ const Course = ({
         margin: 2,
         p: 4,
         minHeight: 300,
-        border: 2,
         display: "flex",
         justifyContent: "center",
         flexDirection: "column",
@@ -113,24 +102,21 @@ const Course = ({
         },
       }}
     >
-      <img
-        src={imageLink || `${imageLink}.png`}
+      <div
         style={{
           backgroundImage: `url(http://localhost:3000${imageLink})`,
-          backgroundSize: "contain",
+          backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
+          height: 200,
         }}
-        alt={title}
-        width={200}
-        height={200}
-      />
-      <Typography variant="h5" component="h2">
+      ></div>
+      <Typography variant="h5" component="h2" sx={{ fontStyle: "bold", pt: 1 }}>
         {title}
       </Typography>
-      <Typography variant="h6" component="h2">
+      <Typography variant="subtitle1" component="h2">
         {description}
       </Typography>
-      <Typography variant="h6" component="h2">
+      <Typography variant="h6" component="h2" sx={{ pt: 1 }}>
         ${price}
       </Typography>
       <Typography variant="subtitle1" component="p">

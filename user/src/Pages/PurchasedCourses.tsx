@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CircularProgress, Typography } from "@mui/material";
 import axiosInstance from "../utils/axiosInstance";
-import { CoursesType } from "../custom";
+import { CourseType, CoursesType } from "../custom";
 import { Link } from "react-router-dom";
+import { Course } from "./Courses";
 
 function PurchasedCourses() {
-  const [courses, setCourses] = useState<CoursesType[]>([]);
+  const [courses, setCourses] = useState<CourseType[]>([]);
 
   // Function to fetch all purchased courses from the backend
   async function fetchCourses() {
@@ -32,13 +33,20 @@ function PurchasedCourses() {
       {courses.map((course) => (
         <>
           <Link to={`/purchase/course/${course.id}`}>
-            <Card key={course.id} style={{ marginBottom: "1rem" }}>
+            <Course
+              title={course.title}
+              imageLink={course.imageLink}
+              id={course.id}
+              description={course.description}
+              price={course.price}
+            />
+            {/* <Card key={course.id} style={{ marginBottom: "1rem" }}>
               <CardContent>
                 <Typography variant="h5">{course.title}</Typography>
                 <Typography variant="body2">{course.description}</Typography>
                 <Typography variant="body2">Price: ${course.price}</Typography>
               </CardContent>
-            </Card>
+            </Card> */}
           </Link>
         </>
       ))}

@@ -9,6 +9,8 @@ import {
   Typography,
   Snackbar,
   Alert,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 
 interface CourseType {
@@ -146,26 +148,21 @@ function EditCourse() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          <label htmlFor="image">Image</label>
-          <input
-            type="file"
-            id="image"
-            name="image"
-            accept="image/*"
-            onChange={(e) =>
-              setImageFile(e.target.files ? e.target.files[0] : null)
-            }
-          />
-          <label htmlFor="video">Video</label>
-          <input
-            type="file"
-            id="video"
-            name="video"
-            accept="video/*"
-            onChange={(e) =>
-              setVideoFile(e.target.files ? e.target.files[0] : null)
-            }
-          />
+          <FormControl>
+            <Button variant="outlined" component="label">
+              Upload Image
+              <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                onChange={(e) =>
+                  setImageFile(e.target.files ? e.target.files[0] : null)
+                }
+                hidden
+              />
+            </Button>
+          </FormControl>
           <TextField
             margin="normal"
             fullWidth

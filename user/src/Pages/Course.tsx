@@ -84,7 +84,16 @@ function Course() {
         alignItems: "center",
       }}
     >
-      <img src={course.imageLink} width={200} alt={course.title} />
+      <div
+        style={{
+          backgroundImage: `url(http://localhost:3000${course.imageLink})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          width: "100%",
+          height: 300,
+          backgroundPosition: "center",
+        }}
+      ></div>
       <Typography variant="h4" sx={{ mt: 2 }}>
         {course.title}
       </Typography>

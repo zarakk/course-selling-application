@@ -1,36 +1,36 @@
 [
   {
     "id": 1,
-    "title": "course1",
+    "title": "learn c++ ",
     "description": "course about c++ edited",
     "price": "399",
-    "imageLink": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/120px-ISO_C%2B%2B_Logo.svg.png",
-    "published": "2023-07-12T15:41:33.410Z"
+    "imageLink": "/uploads/2ea601cf67afa98e5baa34ca8f0e8d16",
+    "published": "Thu Aug 24 2023 17:29:40 GMT+0500 (Pakistan Standard Time)"
   },
   {
     "id": 2,
     "title": "course2",
     "description": "javascript bootcamp",
-    "price": "199",
-    "imageLink": "https://javascriptforwp.com/wp-content/uploads/2019/10/1-2.png",
-    "published": "2023-07-12T17:39:38.221Z"
+    "price": "19",
+    "imageLink": "/uploads/b64297f7ac218f095efa2def83533a10",
+    "published": "Thu Aug 24 2023 17:31:49 GMT+0500 (Pakistan Standard Time)"
   },
   {
     "id": 3,
-    "title": "new course ",
+    "title": "web3",
     "description": "this is a new experimental course",
     "price": "399",
-    "imageLink": "/uploads/70c6fcf397bbc41208071f73e469e7d0",
+    "imageLink": "/uploads/c4ef920df582c7cce45bbe37466bc14f",
     "videoLink": null,
-    "published": "Wed Aug 23 2023 22:31:28 GMT+0500 (Pakistan Standard Time)"
+    "published": "Thu Aug 24 2023 17:32:10 GMT+0500 (Pakistan Standard Time)"
   },
   {
     "id": 4,
     "title": "rust",
     "description": "course about rust ",
     "price": "322",
-    "imageLink": "/uploads/9a47ef7beae4b6306a76cc81c5725fe5",
+    "imageLink": "/uploads/5f4b74d1e37e03b1a81bf4bd854926c5",
     "videoLink": null,
-    "published": "Wed Aug 23 2023 22:31:55 GMT+0500 (Pakistan Standard Time)"
+    "published": "Thu Aug 24 2023 17:32:23 GMT+0500 (Pakistan Standard Time)"
   }
 ]

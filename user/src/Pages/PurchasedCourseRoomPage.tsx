@@ -32,6 +32,11 @@ export default function PurchasedCourseRoomPage() {
     <Box>
       <Typography variant="h4">{course.title}</Typography>
       <Typography>{course.description}</Typography>
+      <Box display="flex" justifyContent="center">
+        <Typography style={{ color: "#333", fontSize: "2.2rem" }}>
+          Course contents soon to come
+        </Typography>
+      </Box>
       <Chat />
     </Box>
   );

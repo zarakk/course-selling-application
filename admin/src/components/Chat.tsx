@@ -84,9 +84,8 @@ export default function Chat() {
         backgroundColor: "white",
         cursor: "pointer",
       }}
-      onClick={handleToggleOpen}
     >
-      <Typography>Chat</Typography>
+      <Button onClick={handleToggleOpen}>Chat</Button>
       <Collapse in={open}>
         <List
           sx={{
